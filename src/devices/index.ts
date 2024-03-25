@@ -299,6 +299,7 @@ import xinghuoyuan from './xinghuoyuan';
 import xyzroe from './xyzroe';
 import yale from './yale';
 import ynoa from './ynoa';
+import yokis from './yokis';
 import yookee from './yookee';
 import ysrsai from './ysrsai';
 import zemismart from './zemismart';
@@ -607,6 +608,7 @@ export default [
     ...xyzroe,
     ...yale,
     ...ynoa,
+    ...yokis,
     ...yookee,
     ...ysrsai,
     ...zemismart,
