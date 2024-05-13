@@ -10,7 +10,7 @@ import {logger} from '../lib/logger';
 import * as exposes from '../lib/exposes';
 import * as utils from '../lib/utils';
 import {Zcl} from 'zigbee-herdsman';
-import {TsType as ZclType} from 'zigbee-herdsman/dist/zcl/definition';
+import {ClusterDefinition} from 'zigbee-herdsman/dist/zspec/zcl/definition/tstype';
 
 // #region Constants
 
@@ -75,7 +75,7 @@ const contactModeEnum: { [s: string]: number } = {
 // #region Custom cluster definition
 
 const YokisClustersDefinition: {
-    [s: string]: ZclType.ClusterDefinition
+    [s: string]: ClusterDefinition
 } = {
     manuSpecificYokisDevice: {
         ID: 0xFC01,
