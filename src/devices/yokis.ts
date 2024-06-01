@@ -599,10 +599,10 @@ const yokisCommandsExtend = {
             .withCategory('config');
 
         const toZigbee: Tz.Converter[] = [{
-            key: ['RelaunchBle'],
+            key: ['RelaunchBleAdvert'],
             convertSet: async (entity, key, value, meta) => {
                 yokisExtendChecks.log(key, value);
-                await entity.command('manuSpecificYokisDevice', 'RelaunchBleAdvert', {});
+                await entity.command('manuSpecificYokisDevice', 'relaunchBleAdvert', {});
             },
         }];
 
@@ -1609,6 +1609,7 @@ const definitions: Definition[] = [
             commandsOnOff(),
             commandsLevelCtrl(),
             commandsWindowCovering(),
+            ...YokisDeviceExtend,
         ],
     },
     { // TLM1-UP
