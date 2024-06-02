@@ -85,6 +85,7 @@ const YokisClustersDefinition: {
             configurationChanged: {ID: 0x0005, type: Zcl.DataType.ENUM16},
         },
         commands: {
+            // Reset setting depending on RESET ACTION value
             resetToFactorySettings: {
                 ID: 0x00,
                 response: 0,
@@ -93,11 +94,13 @@ const YokisClustersDefinition: {
                     {name: 'uc_ResetAction', type: Zcl.DataType.INT8},
                 ],
             },
+            // Relaunch BLE advertising for 15 minutes
             relaunchBleAdvert: {
                 ID: 0x11,
                 response: 0,
                 parameters: [],
             },
+            // Open ZigBee network
             openNetwork: {
                 ID: 0x12,
                 response: 0,
@@ -1545,10 +1548,10 @@ const definitions: Definition[] = [
             deviceAddCustomClusters([
                 'manuSpecificYokisDevice', 'manuSpecificYokisInput', 'manuSpecificYokisLightControl',
                 'manuSpecificYokisDimmer', 'manuSpecificYokisWindowCovering', 'manuSpecificYokisChannel',
-                'manuSpecificYokisChannel', 'manuSpecificYokisPilotWire', 'manuSpecificYokisStats',
+                'manuSpecificYokisPilotWire',
             ]),
             identify(),
-            forcePowerSource({powerSource: 'Battery'}),
+            forcePowerSource({powerSource: 'Battery'}), // until Battery cluster is implemented
             commandsOnOff(),
             commandsLevelCtrl(),
             commandsWindowCovering(),
@@ -1563,11 +1566,11 @@ const definitions: Definition[] = [
             deviceAddCustomClusters([
                 'manuSpecificYokisDevice', 'manuSpecificYokisInput', 'manuSpecificYokisLightControl',
                 'manuSpecificYokisDimmer', 'manuSpecificYokisWindowCovering', 'manuSpecificYokisChannel',
-                'manuSpecificYokisChannel', 'manuSpecificYokisPilotWire', 'manuSpecificYokisStats',
+                'manuSpecificYokisPilotWire',
             ]),
             deviceEndpoints({endpoints: {'1': 1, '2': 2}}),
             identify(),
-            forcePowerSource({powerSource: 'Battery'}),
+            forcePowerSource({powerSource: 'Battery'}), // until Battery cluster is implemented
             commandsOnOff(),
             commandsLevelCtrl(),
             commandsWindowCovering(),
@@ -1582,11 +1585,11 @@ const definitions: Definition[] = [
             deviceAddCustomClusters([
                 'manuSpecificYokisDevice', 'manuSpecificYokisInput', 'manuSpecificYokisLightControl',
                 'manuSpecificYokisDimmer', 'manuSpecificYokisWindowCovering', 'manuSpecificYokisChannel',
-                'manuSpecificYokisChannel', 'manuSpecificYokisPilotWire', 'manuSpecificYokisStats',
+                'manuSpecificYokisPilotWire',
             ]),
             deviceEndpoints({endpoints: {'1': 1, '2': 2, '3': 3, '4': 4}}),
             identify(),
-            forcePowerSource({powerSource: 'Battery'}),
+            forcePowerSource({powerSource: 'Battery'}), // until Battery cluster is implemented
             commandsOnOff(),
             commandsLevelCtrl(),
             commandsWindowCovering(),
@@ -1601,11 +1604,11 @@ const definitions: Definition[] = [
             deviceAddCustomClusters([
                 'manuSpecificYokisDevice', 'manuSpecificYokisInput', 'manuSpecificYokisLightControl',
                 'manuSpecificYokisDimmer', 'manuSpecificYokisWindowCovering', 'manuSpecificYokisChannel',
-                'manuSpecificYokisChannel', 'manuSpecificYokisPilotWire', 'manuSpecificYokisStats',
+                'manuSpecificYokisPilotWire',
             ]),
             deviceEndpoints({endpoints: {'1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8}}),
             identify(),
-            forcePowerSource({powerSource: 'Battery'}),
+            forcePowerSource({powerSource: 'Battery'}), // until Battery cluster is implemented
             commandsOnOff(),
             commandsLevelCtrl(),
             commandsWindowCovering(),
@@ -1621,10 +1624,10 @@ const definitions: Definition[] = [
             deviceAddCustomClusters([
                 'manuSpecificYokisDevice', 'manuSpecificYokisInput', 'manuSpecificYokisLightControl',
                 'manuSpecificYokisDimmer', 'manuSpecificYokisWindowCovering', 'manuSpecificYokisChannel',
-                'manuSpecificYokisChannel', 'manuSpecificYokisPilotWire', 'manuSpecificYokisStats',
+                'manuSpecificYokisPilotWire',
             ]),
             identify(),
-            forcePowerSource({powerSource: 'Battery'}),
+            forcePowerSource({powerSource: 'Battery'}), // until Battery cluster is implemented
             commandsOnOff(),
             commandsLevelCtrl(),
             commandsWindowCovering(),
@@ -1639,11 +1642,11 @@ const definitions: Definition[] = [
             deviceAddCustomClusters([
                 'manuSpecificYokisDevice', 'manuSpecificYokisInput', 'manuSpecificYokisLightControl',
                 'manuSpecificYokisDimmer', 'manuSpecificYokisWindowCovering', 'manuSpecificYokisChannel',
-                'manuSpecificYokisChannel', 'manuSpecificYokisPilotWire', 'manuSpecificYokisStats',
+                'manuSpecificYokisPilotWire',
             ]),
             deviceEndpoints({endpoints: {'1': 1, '2': 2}}),
             identify(),
-            forcePowerSource({powerSource: 'Battery'}),
+            forcePowerSource({powerSource: 'Battery'}), // until Battery cluster is implemented
             commandsOnOff(),
             commandsLevelCtrl(),
             commandsWindowCovering(),
@@ -1658,11 +1661,11 @@ const definitions: Definition[] = [
             deviceAddCustomClusters([
                 'manuSpecificYokisDevice', 'manuSpecificYokisInput', 'manuSpecificYokisLightControl',
                 'manuSpecificYokisDimmer', 'manuSpecificYokisWindowCovering', 'manuSpecificYokisChannel',
-                'manuSpecificYokisChannel', 'manuSpecificYokisPilotWire', 'manuSpecificYokisStats',
+                'manuSpecificYokisPilotWire',
             ]),
             deviceEndpoints({endpoints: {'1': 1, '2': 2, '3': 3, '4': 4}}),
             identify(),
-            forcePowerSource({powerSource: 'Battery'}),
+            forcePowerSource({powerSource: 'Battery'}), // until Battery cluster is implemented
             commandsOnOff(),
             commandsLevelCtrl(),
             commandsWindowCovering(),
