@@ -85,6 +85,7 @@ const YokisClustersDefinition: {
             configurationChanged: {ID: 0x0005, type: Zcl.DataType.ENUM16},
         },
         commands: {
+            // Reset setting depending on RESET ACTION value
             resetToFactorySettings: {
                 ID: 0x00,
                 response: 0,
@@ -93,11 +94,13 @@ const YokisClustersDefinition: {
                     {name: 'uc_ResetAction', type: Zcl.DataType.INT8},
                 ],
             },
+            // Relaunch BLE advertising for 15 minutes
             relaunchBleAdvert: {
                 ID: 0x11,
                 response: 0,
                 parameters: [],
             },
+            // Open ZigBee network
             openNetwork: {
                 ID: 0x12,
                 response: 0,
