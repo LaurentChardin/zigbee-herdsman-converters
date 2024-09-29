@@ -1,4 +1,6 @@
-/* eslint no-unused-vars: "off" */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* TODO : remove eslint-disable when dev is done */
+
 import {Zcl} from 'zigbee-herdsman';
 import {ClusterDefinition} from 'zigbee-herdsman/dist/zspec/zcl/definition/tstype';
 
@@ -6,21 +8,21 @@ import {repInterval} from '../lib/constants';
 import * as exposes from '../lib/exposes';
 import {logger} from '../lib/logger';
 import {
-    onOff,
-    identify,
-    forcePowerSource,
-    deviceEndpoints,
-    commandsOnOff,
-    commandsLevelCtrl,
-    windowCovering,
-    commandsWindowCovering,
-    light,
-    ota,
-    enumLookup,
     binary,
+    commandsLevelCtrl,
+    commandsOnOff,
+    commandsWindowCovering,
+    deviceEndpoints,
+    enumLookup,
+    forcePowerSource,
+    identify,
+    light,
     numeric,
+    onOff,
+    ota,
+    windowCovering,
 } from '../lib/modernExtend';
-import {Definition, Tz, OnEvent, KeyValue, KeyValueAny, ModernExtend} from '../lib/types';
+import {DefinitionWithExtend, KeyValue, KeyValueAny, ModernExtend, OnEvent, Tz} from '../lib/types';
 import * as utils from '../lib/utils';
 
 // #region Constants
@@ -694,7 +696,7 @@ const yokisCommandsExtend = {
 
                     if (!commandWrapper.isSuccess) {
                         logger.warning(
-                            // @ts-expect-error
+                            // @ts-expect-error CommandWrapper contains always contains the error attribute only when isSuccess is false
                             `encountered an error (${commandWrapper.error.reason}) ` +
                                 `while parsing configuration commands (input: ${JSON.stringify(value)})`,
                             NS,
@@ -760,7 +762,7 @@ const yokisCommandsExtend = {
 
                     if (!commandWrapper.isSuccess) {
                         logger.warning(
-                            // @ts-expect-error
+                            // @ts-expect-error  CommandWrapper contains always contains the error attribute only when isSuccess is false
                             `encountered an error (${commandWrapper.error.reason}) ` +
                                 `while parsing configuration commands (input: ${JSON.stringify(value)})`,
                             NS,
@@ -827,7 +829,7 @@ const yokisCommandsExtend = {
 
                     if (!commandWrapper.isSuccess) {
                         logger.warning(
-                            // @ts-expect-error
+                            // @ts-expect-error  CommandWrapper contains always contains the error attribute only when isSuccess is false
                             `encountered an error (${commandWrapper.error.reason}) ` +
                                 `while parsing configuration commands (input: ${JSON.stringify(value)})`,
                             NS,
@@ -889,7 +891,7 @@ const yokisCommandsExtend = {
 
                     if (!commandWrapper.isSuccess) {
                         logger.warning(
-                            // @ts-expect-error
+                            // @ts-expect-error CommandWrapper contains always contains the error attribute only when isSuccess is false
                             `encountered an error (${commandWrapper.error.reason}) ` +
                                 `while parsing configuration commands (input: ${JSON.stringify(value)})`,
                             NS,
@@ -926,7 +928,7 @@ const yokisCommandsExtend = {
 
                     if (!commandWrapper.isSuccess) {
                         logger.warning(
-                            // @ts-expect-error
+                            // @ts-expect-error CommandWrapper contains always contains the error attribute only when isSuccess is false
                             `encountered an error (${commandWrapper.error.reason}) ` +
                                 `while parsing configuration commands (input: ${JSON.stringify(value)})`,
                             NS,
@@ -996,7 +998,7 @@ const yokisCommandsExtend = {
 
                     if (!commandWrapper.isSuccess) {
                         logger.warning(
-                            // @ts-expect-error
+                            // @ts-expect-error CommandWrapper contains always contains the error attribute only when isSuccess is false
                             `encountered an error (${commandWrapper.error.reason}) ` +
                                 `while parsing configuration commands (input: ${JSON.stringify(value)})`,
                             NS,
@@ -1097,7 +1099,7 @@ const yokisCommandsExtend = {
 
                     if (!commandWrapper.isSuccess) {
                         logger.warning(
-                            // @ts-expect-error
+                            // @ts-expect-error CommandWrapper contains always contains the error attribute only when isSuccess is false
                             `encountered an error (${commandWrapper.error.reason}) ` +
                                 `while parsing configuration commands (input: ${JSON.stringify(value)})`,
                             NS,
@@ -1581,7 +1583,7 @@ const YokisStatsExtend: ModernExtend[] = [
 
 // #endregion
 
-const definitions: Definition[] = [
+const definitions: DefinitionWithExtend[] = [
     {
         // MTR500E-UP
         zigbeeModel: ['MTR500E-UP'],
