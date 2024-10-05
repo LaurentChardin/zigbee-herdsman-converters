@@ -370,11 +370,11 @@ const YokisClustersDefinition: {
             // This attribute defines the value of the high dim limit, used during a dimming loop, on a long press for example. This value is set in %. Default: 0x64, Min-Max: 0x00 - 0x64
             highDimLimit: {ID: 0x0009, type: Zcl.DataType.UINT8},
             // This attribute defines the time before the nightlight begin. This value is set in seconds. Default: 0x00000000, Min-Max: 0x00000000 – 0xFFFFFFFE
-            nightLightStartingDelay: {ID: 0x0009, type: Zcl.DataType.UINT32},
+            nightLightStartingDelay: {ID: 0x000c, type: Zcl.DataType.UINT32},
             // This attribute defines the dimming value at the start of the nightlight. This value is set in %. Default: 0x28, Min-Max: 0x00 - 0x64
-            nightLightStartingBrightness: {ID: 0x000c, type: Zcl.DataType.UINT8},
+            nightLightStartingBrightness: {ID: 0x000d, type: Zcl.DataType.UINT8},
             // This attribute defines the dimming value at the last step of the nightlight. This attribute must be lower than 0x000D :Nightlight starting brightness. This value is set in %. Default: 0x05, Min-Max: 0x00 - 0x64
-            nightLightEndingBrightness: {ID: 0x000d, type: Zcl.DataType.UINT8},
+            nightLightEndingBrightness: {ID: 0x000e, type: Zcl.DataType.UINT8},
             // This attribute defines the ramp duration of the nightlight. The ramp is running after the end of the starting delay and until the ending bright is reached. This value is set in seconds. Default: 0x00000E10, Min-Max: 0x00000000 – 0x05265C00
             nightLightRampTime: {ID: 0x000f, type: Zcl.DataType.UINT32},
             // This attribute defines the total duration of the nightlight. It must not be lower than 0x000F : Nightlight ramp time. This value is set in seconds. Default: 0x00000E10, Min-Max: 0x00000000 – 0x05265C00
@@ -396,7 +396,87 @@ const YokisClustersDefinition: {
             // This attribute defines the value of each step during the ramp down of the nightlight mode. This value is set in %. Default: 0x01, Min-Max: 0x01 - 0x64
             stepNightLigth: {ID: 0x0018, type: Zcl.DataType.UINT8},
         },
-        commands: {},
+        commands: {
+            // Start dimming up, from current position to the upper dim limit. When the limit is reached, stay at this position.
+            dimUp: {
+                ID: 0x00,
+                parameters: [],
+            },
+            // Start dimming down, from current position to the lower dim limit. When the limit is reached, stay at this position.
+            dimDown: {
+                ID: 0x01,
+                parameters: [],
+            },
+            // Start the dimming loop process for the selected duration.
+            dim: {
+                ID: 0x02,
+                parameters: [
+                    // Set the duration of the ramp for the continuous variation, otherwise use 0xFFFFFFFF to use the one configured in the product. Value is in ms.
+                    {name: 'ul_RampContinuousDuration', type: Zcl.DataType.UINT32},
+                    // Set the step size, otherwise use 0xFF to use the one configured in the product.. Value is in %.
+                    {name: 'uc_StepContinuous', type: Zcl.DataType.UINT8},
+                ],
+            },
+            // Stop the actual dimming process.
+            dimStop: {
+                ID: 0x04,
+                parameters: [],
+            },
+            // Start dimming to the min value set in the device.
+            dimToMin: {
+                ID: 0x05,
+                parameters: [
+                    // Set the transition time to the selected value, otherwise use 0xFFFFFFFF to use the one configured in the product. Value is in ms.
+                    {name: 'ul_TransitionTime', type: Zcl.DataType.UINT32},
+                ],
+            },
+            // Start dimming to the max value set in the device.
+            dimToMax: {
+                ID: 0x06,
+                parameters: [
+                    // Set the transition time to the selected value, otherwise use 0xFFFFFFFF to use the one configured in the product. Value is in ms.
+                    {name: 'ul_TransitionTime', type: Zcl.DataType.UINT32},
+                ],
+            },
+            // Start the nightlight mode with the given parameters.
+            startNightLightMode: {
+                ID: 0x07,
+                parameters: [
+                    // Set the starting delay value, used before the start of the nightlight, otherwise use 0xFFFFFFFF to use the one configured in the product. Value is in ms.
+                    {name: 'ul_ChildModeStartingDelay', type: Zcl.DataType.UINT32},
+                    // Set the brightness at the beginning of the ramp, otherwise use 0xFF to use the one configured in the product. Value is in %.
+                    {name: 'uc_ChildModeBrightnessStart', type: Zcl.DataType.UINT8},
+                    // Set the brightness at the end of the ramp, otherwise use 0xFF to use the one configured in the product. Value is in %.
+                    {name: 'uc_ChildModeBrightnessEnd', type: Zcl.DataType.UINT8},
+                    // Set the ramp duration, otherwise use 0xFFFFFFFF to use the one configured in the product. Value is in ms.
+                    {name: 'ul_ChildModeRampDuration', type: Zcl.DataType.UINT32},
+                    // Set the total duration of the nightlight, otherwise use 0xFFFFFFFF to use the one configured in the product. Value is in ms.
+                    {name: 'ul_ChildModeOnDuration', type: Zcl.DataType.UINT32},
+                    // Set the step size between each dim, otherwise use 0xFF to use the one configured in the product. Value is in %.
+                    {name: 'uc_ChildStep', type: Zcl.DataType.UINT8},
+                ],
+            },
+            // Start the nightlight mode from the current dimming value.
+            startNightLightModeCurrent: {
+                ID: 0x08,
+                parameters: [],
+            },
+            // Start dimming to the favorite position 1.
+            moveToFavorite1: {
+                ID: 0x09,
+                parameters: [],
+            },
+            // Start dimming to the favorite position 2.
+            moveToFavorite2: {
+                ID: 0x0a,
+                parameters: [],
+            },
+            // Start dimming to the favorite position 3.
+            moveToFavorite3: {
+                ID: 0x0b,
+                parameters: [],
+            },
+        },
         commandsResponse: {},
     },
     manuSpecificYokisWindowCovering: {
@@ -1111,6 +1191,28 @@ const yokisCommandsExtend = {
                     yokisExtendChecks.log(key, value);
 
                     await entity.command('manuSpecificYokisLightControl', 'selectInputMode', commandWrapper.payload);
+                },
+            },
+        ];
+
+        return {
+            exposes: [exposes],
+            toZigbee,
+            isModernExtend: true,
+        };
+    },
+    dimmerMoveToFavorite: (): ModernExtend => {
+        const exposes = e
+            .enum('DimmerMoveToFavorite1', ea.SET, ['moveToFavorite1', 'moveToFavorite2', 'moveToFavorite3'])
+            .withDescription('Start dimming to the favorite position 1, 2 or 3')
+            .withCategory('config');
+
+        const toZigbee: Tz.Converter[] = [
+            {
+                key: ['DimmerMoveToFavorite1'],
+                convertSet: async (entity, key, value: string, meta) => {
+                    yokisExtendChecks.log(key, value);
+                    await entity.command('manuSpecificYokisDimmer', value, {});
                 },
             },
         ];
