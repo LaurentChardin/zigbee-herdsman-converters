@@ -346,7 +346,7 @@ const YokisClustersDefinition: {
         commandsResponse: {},
     },
     manuSpecificYokisDimmer: {
-        ID: 0xfc07, // Details coming soon
+        ID: 0xfc07,
         manufacturerCode: Zcl.ManufacturerCode.YOKIS,
         attributes: {
             // This attribute defines the current position, in %. Default: 0x00, Min-Max: 0x00 - 0x64
@@ -511,10 +511,75 @@ const YokisClustersDefinition: {
         commandsResponse: {},
     },
     manuSpecificYokisPilotWire: {
-        ID: 0xfc0a, // Details coming soon
+        ID: 0xfc0a,
         manufacturerCode: Zcl.ManufacturerCode.YOKIS,
-        attributes: {},
-        commands: {},
+        attributes: {
+            // Represent the actual order used by the device. Default: 0x02, Min-Max: 0x00 - 0xF1. Reportable, not writable
+            actualOrder: {ID: 0x0000, type: Zcl.DataType.UINT8},
+            // Define the “Order” embedded timer duration. This timer is set when the device changes its order (in second). After that duration, the device is set back to its fallback order. Default: 0x00000000, Min-Max: 0x00000000 - 0xFFFFFFFF
+            orderTimer: {ID: 0x0001, type: Zcl.DataType.UINT32},
+            // Define the duration before an order is set. This timer is used when a new order is asked, it corresponds to the time before this order is applied. The duration is set in second. Default: 0x00000000, Min-Max: 0x00000000 - 0xFFFFFFFF
+            preOrderTimer: {ID: 0x0002, type: Zcl.DataType.UINT32},
+            // Represent the actual unit used for local command configuration : 0x00 -> Second, 0x01 -> Minutes. Default: 0x00, Min-Max: 0x00 - 0x01.
+            timerUnit: {ID: 0x0003, type: Zcl.DataType.UINT8},
+            // Define the product’s LED behavior: 0x00 -> LED is always ON and blink during radio activity, 0x01 -> LED is only OFF during few seconds after a mode transition. Default: 0x00, Min-Max: 0x00 - 0x01.
+            ledMode: {ID: 0x0004, type: Zcl.DataType.UINT8},
+            // Define if the product must be set into pilot wire relay mode: 0x00 -> Relay mode is deactivated, 0x01 -> Relay mode is activated. Default: 0x00, Min-Max: 0x00 - 0x01.
+            pilotWireRelayMode: {ID: 0x0005, type: Zcl.DataType.UINT8},
+            // Define the order scrolling sense: 0x00 -> Forward : Confort -> Confort – 1 -> Confort – 2 -> Eco -> Hors-Gel -> Arrêt, 0x01 -> Backward : Arrêt -> Hors-Gel -> Eco -> Confort – 2 -> Confort – 1 -> Confort. Default: 0x00, Min-Max: 0x00 - 0x01.
+            orderScrollingMode: {ID: 0x0006, type: Zcl.DataType.UINT8},
+            // Define the number of orders supported by the device: 0x00 -> 4 orders (Confort, Eco, Hors-Gel, Arrêt), 0x01 -> 6 orders (Confort, Confort – 1, Confort – 2, Eco, Hors-Gel, Arrêt). Default: 0x01, Min-Max: 0x00 - 0x01.
+            orderNumberSupported: {ID: 0x0007, type: Zcl.DataType.UINT8},
+            // Represent the fallback order used by the device after the end of an order timer is reached: 0x00 -> Stop, 0x01 -> Frost-off, 0x02 -> Eco, 0x03 -> Confort-2, 0x04 -> Confort-1, 0x05 -> Confort. Default: 0x02, Min-Max: 0x00 - 0x05.
+            fallbackOrder: {ID: 0x0008, type: Zcl.DataType.UINT8},
+        },
+        commands: {
+            // Set the device in the specified order.
+            setOrder: {
+                ID: 0x00,
+                parameters: [
+                    // Order to be set : 0x00 -> Stop, 0x01 -> Frost-off, 0x02 -> Eco, 0x03 -> Confort-2, 0x04 -> Confort-1, 0x05 -> Confort
+                    {name: 'uc_Order', type: Zcl.DataType.UINT8},
+                ],
+            },
+            // Toggle between order by respecting the scrolling order.
+            toggleOrder: {
+                ID: 0x01,
+                parameters: [],
+            },
+        },
+        commandsResponse: {},
+    },
+    manuSpecificYokisTemperatureMeasurement: {
+        ID: 0xfc0b,
+        manufacturerCode: Zcl.ManufacturerCode.YOKIS,
+        attributes: {
+            // This attribute represents the last value measured. The unit is in 0.01 °C (12,25°C -> 1225). Default: 0x0000, Min-Max: 0x954D - 0x7FFE. Reportable, not writable
+            currentValue: {ID: 0x0000, type: Zcl.DataType.INT16},
+            // Represent the minimal value set since the last power-on/reset. The unit is in 0.01 °C (12,25°C -> 1225). Default: 0x7FFE , Min-Max: 0x954D - 0x7FFE. Reportable, not writable
+            minMeasuredValue: {ID: 0x0001, type: Zcl.DataType.INT16},
+            // Represent the maximal value set since the last power-on/reset. The unit is in 0.01 °C (12,25°C -> 1225). Default: 0x954D , Min-Max: 0x954D - 0x7FFE. Reportable, not writable
+            maxMeasuredValue: {ID: 0x0002, type: Zcl.DataType.INT16},
+            // Represent the offset applicated to the temperature measured. The unit is in 0,1°C (1,5°C -> 15). Default: 0x00, Min-Max: 0xCE (-50) - 0x32 (50).
+            offset: {ID: 0x0003, type: Zcl.DataType.INT8},
+            // Represent the sampling period used to process the temperature measurement. The unit is in seconds. Default: 0x0A, Min-Max: 0x01 - 0x78.
+            samplingPeriod: {ID: 0x0004, type: Zcl.DataType.UINT8},
+            // Represents the sampling number to sense per sampling period defined before. Default: 0x03, Min-Max: 0x01 - 0x14.
+            samplingNumber: {ID: 0x0005, type: Zcl.DataType.UINT8},
+            // Represents the temperature variation to request a new temperature sending through reports. The unit is in 0,1°C (0,5°C ->5). Default: 0x00, Min-Max: 0x00 - 0x0A.
+            deltaTemp: {ID: 0x0006, type: Zcl.DataType.UINT8},
+            // Represents the minimal sending period that the device must respect before sending a new value through reporting. A writing on this attribute will update all reporting entries related to the temperature measurement. Default: 0x0A, Min-Max: 0x0000 - 0xFFFF.
+            minimalSendingPeriod: {ID: 0x0007, type: Zcl.DataType.UINT16},
+            // Represents the maximal sending period. The device must send a new value through reporting before the end of this period. A writing on this attribute will update all reporting entries related to the temperature measurement. Default: 0x0A, Min-Max: 0x0000 - 0xFFFF.
+            maximalSendingPeriod: {ID: 0x0008, type: Zcl.DataType.UINT16},
+        },
+        commands: {
+            // Reset the Min and Max temperature value information.
+            minMaxReset: {
+                ID: 0x00,
+                parameters: [],
+            },
+        },
         commandsResponse: {},
     },
     manuSpecificYokisStats: {
@@ -528,7 +593,7 @@ const YokisClustersDefinition: {
 
 function deviceAddCustomClusters(clusterNames: string[]): ModernExtend {
     // Follow-up with https://github.com/Koenkk/zigbee2mqtt/issues/22425
-    // The onEvent is creating a race conditions at startup : this implementation may change in the future.
+    // The onEvent may be creating a race conditions at startup : this implementation may change in the future.
     const onEvent: OnEvent = async (type, data, device, options, state: KeyValue) => {
         logger.debug(`Loading Custom Clusters for ${device.modelID} (event: ${type})`, NS);
 
@@ -539,6 +604,8 @@ function deviceAddCustomClusters(clusterNames: string[]): ModernExtend {
             }
         }
     };
+
+    //TODO: adding configure ? https://github.com/Koenkk/zigbee2mqtt/issues/23993
 
     return {onEvent, isModernExtend: true};
 }
@@ -2533,7 +2600,7 @@ const definitions: DefinitionWithExtend[] = [
             // ...YokisInputExtend,
             // ...YokisEntryExtend,
             // ...YokisSubSystemExtend,
-            // ...YokisWindowCoveringExtend,
+            ...YokisWindowCoveringExtend,
             // ...YokisStatsExtend
         ],
     },
