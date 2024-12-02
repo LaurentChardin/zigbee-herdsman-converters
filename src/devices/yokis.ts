@@ -19,7 +19,6 @@ import {
     light,
     numeric,
     onOff,
-    ota,
     windowCovering,
 } from '../lib/modernExtend';
 import {DefinitionWithExtend, KeyValue, KeyValueAny, ModernExtend, OnEvent, Tz} from '../lib/types';
