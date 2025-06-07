@@ -2565,6 +2565,132 @@ const YokisStatsExtend: ModernExtend[] = [
     // TODO : Placeholder - pending documentation
 ];
 
+const YokisTemperatureMeasurementExtend: ModernExtend[] = [
+    // currentValue > this is probably redundant with msTemperatureMeasurement
+    m.numeric({
+        name: "current_value",
+        cluster: "manuSpecificYokisTemperatureMeasurement",
+        attribute: "currentValue",
+        description: "This attribute represents the last value measured.",
+        access: "STATE_GET",
+        entityCategory: "diagnostic",
+        //endpointNames: ["9"],
+        unit: "°C",
+        valueMin: -50.0,
+        valueMax: 120.0,
+        valueStep: 0.01,
+        scale: 100,
+        // reporting: {min: "10_SECONDS", max: "1_HOUR", change: 100},
+    }),
+
+    m.numeric({
+        name: "min_measured_value",
+        cluster: "manuSpecificYokisTemperatureMeasurement",
+        attribute: "minMeasuredValue",
+        description: "Represent the minimal value set since the last power-on/reset.",
+        access: "STATE_GET",
+        entityCategory: "diagnostic",
+        //endpointNames: ["9"],
+        unit: "°C",
+        valueMin: -50.0,
+        valueMax: 120.0,
+        valueStep: 0.01,
+        scale: 100,
+    }),
+
+    m.numeric({
+        name: "max_measured_value",
+        cluster: "manuSpecificYokisTemperatureMeasurement",
+        attribute: "maxMeasuredValue",
+        description: "Represent the maximal value set since the last power-on/reset.",
+        access: "STATE_GET",
+        entityCategory: "diagnostic",
+        //endpointNames: ["9"],
+        unit: "°C",
+        valueMin: -50.0,
+        valueMax: 120.0,
+        valueStep: 0.01,
+        scale: 100,
+    }),
+
+    m.numeric({
+        name: "offset",
+        cluster: "manuSpecificYokisTemperatureMeasurement",
+        attribute: "offset",
+        description: "Represent the offset applicated to the temperature measured.",
+        entityCategory: "config",
+        //endpointNames: ["9"],
+        unit: "°C",
+        valueMin: -50.0,
+        valueMax: 50.0,
+        valueStep: 0.1,
+        scale: 10,
+    }),
+
+    m.numeric({
+        name: "samplingPeriod",
+        cluster: "manuSpecificYokisTemperatureMeasurement",
+        attribute: "samplingPeriod",
+        description: "Represent the sampling period used to process the temperature measurement.",
+        entityCategory: "config",
+        //endpointNames: ["9"],
+        unit: "s",
+        valueMin: 1,
+        valueMax: 120,
+        valueStep: 1,
+    }),
+
+    m.numeric({
+        name: "samplingNumber",
+        cluster: "manuSpecificYokisTemperatureMeasurement",
+        attribute: "samplingNumber",
+        description: "Represents the sampling number to sense per sampling period defined before.",
+        entityCategory: "config",
+        //endpointNames: ["9"],
+        valueMin: 1,
+        valueMax: 20,
+        valueStep: 1,
+    }),
+
+    m.numeric({
+        name: "deltaTemp",
+        cluster: "manuSpecificYokisTemperatureMeasurement",
+        attribute: "deltaTemp",
+        description: "Represents the temperature variation to request a new temperature sending through reports.",
+        entityCategory: "config",
+        //endpointNames: ["9"],
+        unit: "°C",
+        valueMin: 0,
+        valueMax: 10,
+        valueStep: 0.1,
+        scale: 10,
+    }),
+
+    m.numeric({
+        name: "minimalSendingPeriod",
+        cluster: "manuSpecificYokisTemperatureMeasurement",
+        attribute: "minimalSendingPeriod",
+        description: "Represents the minimal sending period that the device must respect before sending a new value through reporting.",
+        entityCategory: "config",
+        //endpointNames: ["9"],
+        valueMin: 0,
+        valueMax: 65535,
+        valueStep: 1,
+    }),
+
+    m.numeric({
+        name: "maximalSendingPeriod",
+        cluster: "manuSpecificYokisTemperatureMeasurement",
+        attribute: "maximalSendingPeriod",
+        description: "Represents the maximal sending period. The device must send a new value through reporting before the end of this period.",
+        entityCategory: "config",
+        //endpointNames: ["9"],
+        valueMin: 0,
+        valueMax: 65535,
+        valueStep: 1,
+    }),
+];
+
 // #endregion
 
 export const definitions: DefinitionWithExtend[] = [
@@ -2823,6 +2949,7 @@ export const definitions: DefinitionWithExtend[] = [
             m.deviceAddCustomCluster("manuSpecificYokisChannel", YokisClustersDefinition.manuSpecificYokisChannel),
             m.deviceAddCustomCluster("manuSpecificYokisPilotWire", YokisClustersDefinition.manuSpecificYokisPilotWire), // Pending implementation
             m.deviceAddCustomCluster("manuSpecificYokisTemperatureMeasurement", YokisClustersDefinition.manuSpecificYokisTemperatureMeasurement), // Pending implementation
+            //m.deviceEndpoints({endpoints: {"1": 1, "9": 9}}),
             m.identify(),
             m.commandsOnOff(),
             m.commandsLevelCtrl(),
@@ -2830,7 +2957,9 @@ export const definitions: DefinitionWithExtend[] = [
             // ...YokisDeviceExtend,
             // ...YokisInputExtend,
             // ...YokisChannelExtend,
-            ...YokisPilotWireExtend,
+            // ...YokisPilotWireExtend,
+            m.temperature({reporting: {min: "10_SECONDS", max: "1_HOUR", change: 10}}),
+            ...YokisTemperatureMeasurementExtend,
         ],
     },
     {
@@ -2855,7 +2984,7 @@ export const definitions: DefinitionWithExtend[] = [
             // ...YokisDeviceExtend,
             // ...YokisInputExtend,
             // ...YokisChannelExtend,
-            ...YokisPilotWireExtend,
+            // ...YokisPilotWireExtend,
         ],
     },
     {
@@ -2921,8 +3050,8 @@ export const definitions: DefinitionWithExtend[] = [
             m.deviceAddCustomCluster("manuSpecificYokisDimmer", YokisClustersDefinition.manuSpecificYokisDimmer),
             m.deviceAddCustomCluster("manuSpecificYokisWindowCovering", YokisClustersDefinition.manuSpecificYokisWindowCovering), // Pending implementation
             m.deviceAddCustomCluster("manuSpecificYokisChannel", YokisClustersDefinition.manuSpecificYokisChannel),
-            m.deviceAddCustomCluster("manuSpecificYokisPilotWire", YokisClustersDefinition.manuSpecificYokisPilotWire), // Pending implementation
-            m.deviceAddCustomCluster("manuSpecificYokisTemperatureMeasurement", YokisClustersDefinition.manuSpecificYokisTemperatureMeasurement), // Pending implementation
+            m.deviceAddCustomCluster("manuSpecificYokisPilotWire", YokisClustersDefinition.manuSpecificYokisPilotWire),
+            m.deviceAddCustomCluster("manuSpecificYokisTemperatureMeasurement", YokisClustersDefinition.manuSpecificYokisTemperatureMeasurement),
             m.identify(),
             m.commandsOnOff(),
             m.commandsLevelCtrl(),
@@ -2930,7 +3059,9 @@ export const definitions: DefinitionWithExtend[] = [
             // ...YokisDeviceExtend,
             // ...YokisInputExtend,
             // ...YokisChannelExtend,
-            ...YokisPilotWireExtend,
+            // ...YokisPilotWireExtend,
+            m.temperature({reporting: {min: "10_SECONDS", max: "1_HOUR", change: 10}}),
+            ...YokisTemperatureMeasurementExtend,
         ],
     },
     {
@@ -2956,7 +3087,8 @@ export const definitions: DefinitionWithExtend[] = [
             // ...YokisDeviceExtend,
             // ...YokisInputExtend,
             // ...YokisChannelExtend,
-            ...YokisPilotWireExtend,
+            // ...YokisPilotWireExtend,
+            ...YokisTemperatureMeasurementExtend,
         ],
     },
     {
@@ -2982,7 +3114,8 @@ export const definitions: DefinitionWithExtend[] = [
             // ...YokisDeviceExtend,
             // ...YokisInputExtend,
             // ...YokisChannelExtend,
-            ...YokisPilotWireExtend,
+            // ...YokisPilotWireExtend,
+            ...YokisTemperatureMeasurementExtend,
         ],
     },
     {
@@ -3008,7 +3141,8 @@ export const definitions: DefinitionWithExtend[] = [
             // ...YokisDeviceExtend,
             // ...YokisInputExtend,
             // ...YokisChannelExtend,
-            ...YokisPilotWireExtend,
+            // ...YokisPilotWireExtend,
+            ...YokisTemperatureMeasurementExtend,
         ],
     },
     {
